@@ -5,17 +5,27 @@ import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import RecomandedCourse from "@/components/RecomandedCourse";
 
+const page = async () => {
+  const res = await fetch("https://api.10minuteschool.com/discovery-service/api/v1/products/ielts-course?lang=bn&=", {
+    method: "GET",
+    headers: {
+      "X-TENMS-SOURCE-PLATFORM": "web",
+      "accept": "application/json",
+    },
+    cache: "no-store", 
+  });
 
+  const apiData = await res.json();
+  // console.log(apiData)
 
-const page = () => {
   return (
     <div>
-  <Navbar/>
-  <Banner/>
-  <Course/>
-  <CourseDetails/>
-  <RecomandedCourse/>
-  <Footer/>
+      <Navbar />
+      <Banner />
+      <Course data={apiData?.data} />
+      <CourseDetails data={apiData?.data} />
+      <RecomandedCourse />
+      <Footer />
     </div>
   );
 };

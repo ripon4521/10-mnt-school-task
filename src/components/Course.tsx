@@ -1,25 +1,32 @@
 import Image from 'next/image';
 import type { FC } from 'react';
 
-// Define types for our data structures
+type CourseProps = {
+  data: any; 
+};
+
+
+interface CourseFeature {
+  color: string;
+  icon: string;
+  id: string;
+  list_page_visibility: boolean;
+  text: string;
+}
+
+
 interface VideoThumbnail {
   src: string;
   hasPlayIcon: boolean;
   isSelected: boolean;
 }
 
-interface CourseFeature {
-  icon: string;
-  text: string;
-}
-
 interface VideoPlayerProps {
   forMobile?: boolean;
 }
 
-const Course: FC = () => {
-
-  // Typed data for mapping
+const Course: FC<CourseProps> = (data) => {
+ 
   const videoThumbnails: VideoThumbnail[] = [
     { src: 'https://cdn.10minuteschool.com/images/thumbnails/IELTS_new_16_9.png', hasPlayIcon: true, isSelected: true },
     { src: 'https://cdn.10minuteschool.com/images/catalog/media/PDP_Banner-1_1726737298483.png', hasPlayIcon: false, isSelected: false },
@@ -29,20 +36,13 @@ const Course: FC = () => {
     { src: 'https://cdn.10minuteschool.com/images/catalog/media/AvB2ibYd1z4-HD_1707647843136.jpg', hasPlayIcon: true, isSelected: false },
   ];
 
-  const courseFeatures: CourseFeature[] = [
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/course_participants.png', text: 'কোর্সটি করছেন ৩৩০০৭ জন' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/time.png', text: 'সময় লাগবে ৫০ ঘন্টা' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/video.png', text: '৫৪টি ভিডিও' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/mock_test.png', text: '১০টি রিডিং এবং ১০টি লিসেনিং মক টেস্ট' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/cheatsheet-projectfile-exercisefile-sourcefile-resource.png', text: '৩৮টি লেকচার শিট' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/video-lecture.png', text: '২৫টি ভিডিও লেকচার' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/digital-book_work-book.png', text: '১টি ফ্রি হার্ডকপি বই' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/facebook-community.png', text: 'ফেসবুক সাপোর্ট গ্রুপ' },
-    { icon: 'https://cdn.10minuteschool.com/images/PDP/course-fact-icons/time-limit.png', text: 'কোর্সের মেয়াদ আজীবন' },
-  ];
-
-  // Typed Reusable Video Player Component
+ 
+  
   const VideoPlayer: FC<VideoPlayerProps> = ({ forMobile = false }) => (
+
+
+
+
     <>
       <div className="relative overflow-hidden  youtube-video aspect-video">
         <div className="relative">
@@ -112,7 +112,7 @@ const Course: FC = () => {
           <div className="block mt-4 md:mt-0 md:hidden">
             <VideoPlayer forMobile={true} />
           </div>
-          <h1 className="text-white mb-2 text-[21px] font-semibold md:text-4xl">IELTS Course by Munzereen Shahid</h1>
+          <h1 className="text-white mb-2 text-[21px] font-semibold md:text-4xl">{data?.data?.title}</h1>
           <div className="mb-2">
             <button className="flex flex-row flex-wrap items-center gap-2 text-white">
               <span className="inline-block">
@@ -129,13 +129,12 @@ const Course: FC = () => {
           </div>
           <div>
             <div className="text-gray-400" style={{ overflow: 'hidden', height: 'auto' }}>
-              <div>
-                <p dir="ltr">
-                  <span style={{ whiteSpace: 'pre-wrap' }}>
-                    Academic IELTS এবং General Training IELTS- এর কমপ্লিট প্রিপারেশন নিন একটি কোর্সেই! দেশসেরা IELTS Instructor এর গাইডলাইনে আপনার কাঙ্ক্ষিত ব্যান্ড স্কোরটি অর্জন করতে আজই জয়েন করুন আমাদের IELTS Course-এ।
-                  </span>
-                </p>
-              </div>
+           <div
+  className="text-gray-400"
+  style={{ overflow: 'hidden', height: 'auto' }}
+  dangerouslySetInnerHTML={{ __html: data?.data?.description || "" }}
+></div>
+
             </div>
           </div>
         </div>
@@ -164,34 +163,33 @@ const Course: FC = () => {
                       </div>
                     </div>
                     <button className="bg-[#1CAB55] text-white whitespace-nowrap button primary text-center md:w-full py-3 px-4 rounded-lg mt-3 font-semibold hover:bg-green-700 transition-colors">
-                      কোর্সটি কিনুন
-                    </button>
+{data?.data?.cta_text?.name}                    </button>
                   </div>
                 </div>
               </div>
 
               {/* Course Features */}
-              <div className="hidden md:block">
-                <div className="grid py-2 md:p-4">
-                  <p className="mb-4 text-xl font-semibold">এই কোর্সে যা থাকছে</p>
-                  {courseFeatures.map((feature, index) => (
-                    <div key={index}>
-                      <div className="flex items-center mb-3 leading-5">
-                        <div className="inline-block h-[20px] w-[20px]">
-                            <Image
-                              alt="icon"
-                              src={feature.icon}
-                              loading="lazy"
-                              width={20}
-                              height={20}
-                            />
-                        </div>
-                        <h4 className="mb-0 inline-block pl-4 tracking-[0.005em] text-[#111827]">{feature.text}</h4>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div className="hidden md:block">
+      <div className="grid py-2 md:p-4">
+        <p className="mb-4 text-xl font-semibold">এই কোর্সে যা থাকছে</p>
+        {data?.data?.checklist.map((feature :CourseFeature) => (
+          <div className="flex items-center mb-3 leading-5">
+            <div className="inline-block h-[20px] w-[20px]">
+              <Image
+                alt="icon"
+                src={feature.icon}
+                loading="lazy"
+                width={20}
+                height={20}
+              />
+            </div>
+            <h4 className="mb-0 inline-block pl-4 tracking-[0.005em] text-[#111827]">
+              {feature.text}
+            </h4>
+          </div>
+        ))}
+      </div>
+    </div>
             </div>
             
             {/* Contact Info */}
